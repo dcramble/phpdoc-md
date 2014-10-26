@@ -81,7 +81,7 @@ class Parser
 
         foreach($xml->xpath('file/class|file/interface') as $class) {
 
-            $className = $this->printNamespacedNames ? (string)$class->full_name : (string)$class->name;
+            $className = (string)$class->full_name;
             $className = ltrim($className,'\\');
 
             $fileName = str_replace('\\','-', $className) . '.md';
@@ -138,7 +138,7 @@ class Parser
 
         $methods = array();
 
-        $className = (string)$class->full_name;
+        $className = $this->printNamespacedNames ? (string)$class->full_name : (string)$class->name;
         $className = ltrim($className,'\\');
 
         foreach($class->method as $method) {
