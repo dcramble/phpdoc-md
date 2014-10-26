@@ -21,7 +21,7 @@ Simply add:
 
     "require-dev" : {
 
-        "evert/phpdoc-md" : "~0.0.7"
+        "gkcgautam/phpdoc-md" : "~0.0.7"
 
     }
 
