@@ -27,6 +27,7 @@ $arguments = array_values($arguments);
 $positional = array();
 $named = array(
     'lt' => "%c.md",
+    'namespaced_names' => 1,
 );
 
 for($i=0; $i < count($arguments); $i++) {
@@ -69,7 +70,8 @@ $input = $positional[0];
 $outputDir = isset($positional[1])?$positional[1]:'.';
 
 $parser = new PHPDocMD\Parser(
-    $input
+    $input,
+    $named['namespaced_names']
 );
 
 echo "Parsing structure.xml\n";

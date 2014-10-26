@@ -29,14 +29,22 @@ class Parser
     protected $classDefinitions;
 
     /**
+     * Whether to print method names with namespace or not
+     *
+     * @var boolean
+     */
+    protected $printNamespacedNames;
+
+    /**
      * Constructor
      *
      * @param string $structureXmlFile
      */
-    public function __construct($structureXmlFile)
+    public function __construct($structureXmlFile, $printNamespacedNames = 1)
     {
 
         $this->structureXmlFile = $structureXmlFile;
+        $this->printNamespacedNames = (int) $printNamespacedNames;
 
     }
 

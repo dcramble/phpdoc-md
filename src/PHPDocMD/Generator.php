@@ -55,7 +55,7 @@ class Generator
      * @param string $templateDir
      * @param string $linkTemplate
      */
-    public function __construct(array $classDefinitions, $outputDir, $templateDir, $linkTemplate = '%c.md')
+    public function __construct(array $classDefinitions, $outputDir, $templateDir, $linkTemplate = '%c.md', $printNamespacedNames = 1)
     {
 
         $this->classDefinitions = $classDefinitions;
