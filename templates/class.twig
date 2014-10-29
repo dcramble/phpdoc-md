@@ -1,10 +1,6 @@
 {{ className }}
 ---------------
 
-    {{ description }}
-
-    {{ longDescription|raw }}
-
 {% if isClass %}
 
 **Class name**: {{ shortClass }}
@@ -24,6 +20,12 @@
 {% endif %}
 
 {% endif %}
+
+
+    {{ description }}
+
+    {{ longDescription|raw }}
+
 
 {% if isInterface %}
 **Interface name**: {{ shortClass }}
@@ -64,7 +66,9 @@ Properties
 
 {% for property in properties %}
 
-**{{ property.name }}** - {{ property.description|raw }}
+**{{ property.name }}**
+
+{{ property.description|raw }}
 
     {{ property.signature|raw }}
 
@@ -87,11 +91,10 @@ Methods
 
 {% for method in methods %}
 
-{{ method.visibility }} **{{ method.name }}**
+{{ method.visibility }} **{{ method.name }}** ( {{ method.argumentString }} )
 
-    {{ method.signature|raw }}
 
-{{ method.description|raw }}
+{{ method.description }}
 
 
 {% if method.abstract %}This method is **abstract**.
@@ -103,20 +106,16 @@ Methods
 {% if method.deprecated %}**Warning:** this method is **deprecated**. This means that this method will likely be removed in a future version.
 {% endif %}
 
-{% if method.definedBy != className %}This method is defined by {{ method.definedBy|classLink }}
-{% endif %}
-
 
 {% if method.arguments %}
-    **Arguments**:
+**Parameters**:
 
+| Parameter | Type | Description |
+|-----------|------|-------------|
 {% for argument in method.arguments %}
-    **{{ argument.name }}** {% if argument.type %}{{ argument.type|classLink }}{% else %}mixed{% endif %} {% if argument.description %} - {{ argument.description }}{% endif %}
-
+| {{ argument.name }} | {% if argument.type %}{{ argument.type|classLink(argument.typeLabel) }}{% else %}mixed{% endif %} | {% if argument.description %}{{ argument.description }}{% endif %} |
 {% endfor %}
 
 {% endif %}
-
 --
-
 {% endfor %}

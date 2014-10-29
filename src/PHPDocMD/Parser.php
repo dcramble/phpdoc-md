@@ -40,7 +40,7 @@ class Parser
      *
      * @param string $structureXmlFile
      */
-    public function __construct($structureXmlFile, $printNamespacedNames = 1)
+    public function __construct($structureXmlFile, $printNamespacedNames = false)
     {
 
         $this->structureXmlFile = $structureXmlFile;
@@ -138,8 +138,10 @@ class Parser
 
         $methods = array();
 
-        $className = $this->printNamespacedNames ? (string)$class->full_name : (string)$class->name;
+        $className = (string)$class->full_name;
         $className = ltrim($className,'\\');
+
+        $classLabel = (string)$class->name;
 
         foreach($class->method as $method) {
 
@@ -165,6 +167,7 @@ class Parser
                     $tag = $tag[0];
                     if ((string)$tag['type']) {
                         $nArgument['type'] = (string)$tag['type'];
+                        $nArgument['typeLabel'] = array_pop(explode("\\", $nArgument['type']));
                     }
                     if ((string)$tag['description']) {
                         $nArgument['description'] = (string)$tag['description'];
@@ -180,21 +183,23 @@ class Parser
             }
 
             $argumentStr = implode(', ', array_map(function($argument) {
-                return ($argument['type']?$argument['type'] . ' ':'') . $argument['name'];
+                return ($argument['type'] ? ($this->printNamespacedNames ? $argument['type'] : $argument['typeLabel']) . ' ' : '') . $argument['name'];
             }, $arguments));
 
-            $signature = $return . ' ' . $className . '::' . $methodName . '('.$argumentStr.')';
+            $signature = $return . ' ' . ($this->printNamespacedNames ? $className : $classLabel) . '::' . $methodName . '('.$argumentStr.')';
 
             $methods[$methodName] = array(
-                'name' => $methodName,
-                'description' => (string)$method->docblock->description . "\n\n" . (string)$method->docblock->{"long-description"},
-                'visibility' => (string)$method['visibility'],
-                'abstract'   => ((string)$method['abstract'])=="true",
-                'static'   => ((string)$method['static'])=="true",
-                'deprecated' => count($class->xpath('docblock/tag[@name="deprecated"]'))>0,
-                'signature' => $signature,
-                'arguments' => $arguments,
-                'definedBy' => $className,
+                'name'           => $methodName,
+                'description'    => (string)$method->docblock->description . "\n\n" . (string)$method->docblock->{"long-description"},
+                'visibility'     => (string)$method['visibility'],
+                'abstract'       => ((string)$method['abstract'])=="true",
+                'static'         => ((string)$method['static'])=="true",
+                'deprecated'     => count($class->xpath('docblock/tag[@name="deprecated"]'))>0,
+                'signature'      => $signature,
+                'arguments'      => $arguments,
+                'argumentString' => $argumentStr,
+                'definedBy'      => $className,
+                'definedByLabel' => $classLabel,
             );
 
         }
@@ -218,6 +223,8 @@ class Parser
         $className = (string)$class->full_name;
         $className = ltrim($className,'\\');
 
+        $classLabel = (string)$class->name;
+
         foreach($class->property as $xProperty) {
 
             $type = 'mixed';
@@ -226,24 +233,27 @@ class Parser
 
             $xVar = $xProperty->xpath('docblock/tag[@name="var"]');
             if (count($xVar)) {
-                $type = $xVar[0]->type;
+                $type     = (string)$xVar[0]->type;
+                $typeLabel= array_pop(explode("\\", $type));
             }
 
             $visibility = (string)$xProperty['visibility'];
-            $signature = $visibility . ' ' . $type . ' ' . $propName;
+            $signature = $visibility . ' ' . ($this->printNamespacedNames ? $type : $typeLabel) . ' ' . $propName;
 
             if ($default) $signature.=' = ' . $default;
 
             $properties[$propName] = array(
-                'name' => $propName,
-                'type' => $type,
-                'default' => $default,
-                'description' => (string)$xProperty->docblock->description . "\n\n" . (string)$xProperty->docblock->{"long-description"},
-                'visibility' => $visibility,
-                'static'   => ((string)$xProperty['static'])=="true",
-                'signature' => $signature,
-                'deprecated' => count($class->xpath('docblock/tag[@name="deprecated"]'))>0,
-                'definedBy' => $className,
+                'name'          => $propName,
+                'type'          => $type,
+                'typeLabel'     => $typeLabel,
+                'default'       => $default,
+                'description'   => (string)$xProperty->docblock->description . "\n\n" . (string)$xProperty->docblock->{"long-description"},
+                'visibility'    => $visibility,
+                'static'        => ((string)$xProperty['static'])=="true",
+                'signature'     => $signature,
+                'deprecated'    => count($class->xpath('docblock/tag[@name="deprecated"]'))>0,
+                'definedBy'     => $className,
+                'definedByLabel'=> $classLabel,
             );
 
         }
@@ -267,6 +277,8 @@ class Parser
         $className = (string)$class->full_name;
         $className = ltrim($className,'\\');
 
+        $classLabel = (string)$class->name;
+
         foreach($class->constant as $xConstant) {
 
             $name = (string)$xConstant->name;
@@ -275,12 +287,13 @@ class Parser
             $signature = 'const ' . $name . ' = ' . $value;
 
             $constants[$name] = array(
-                'name' => $name,
-                'description' => (string)$xConstant->docblock->description . "\n\n" . (string)$xConstant->docblock->{"long-description"},
-                'signature' => $signature,
-                'value' => $value,
-                'deprecated' => count($class->xpath('docblock/tag[@name="deprecated"]'))>0,
-                'definedBy' => $className,
+                'name'           => $name,
+                'description'    => (string)$xConstant->docblock->description . "\n\n" . (string)$xConstant->docblock->{"long-description"},
+                'signature'      => $signature,
+                'value'          => $value,
+                'deprecated'     => count($class->xpath('docblock/tag[@name="deprecated"]'))>0,
+                'definedBy'      => $className,
+                'definedByLabel' => $classLabel,
             );
 
         }

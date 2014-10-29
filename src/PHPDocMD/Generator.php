@@ -55,7 +55,7 @@ class Generator
      * @param string $templateDir
      * @param string $linkTemplate
      */
-    public function __construct(array $classDefinitions, $outputDir, $templateDir, $linkTemplate = '%c.md', $printNamespacedNames = 1)
+    public function __construct(array $classDefinitions, $outputDir, $templateDir, $linkTemplate = '%c.md', $printNamespacedNames = false)
     {
 
         $this->classDefinitions = $classDefinitions;
@@ -174,7 +174,7 @@ class Generator
 
             $oneClass = trim($oneClass,'\\ ');
 
-            $myLabel = $label?:$oneClass;
+            $myLabel = $label ? : $oneClass;
 
             if (!isset($classDefinitions[$oneClass])) {
 

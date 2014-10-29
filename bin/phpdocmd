@@ -27,29 +27,35 @@ $arguments = array_values($arguments);
 $positional = array();
 $named = array(
     'lt' => "%c.md",
-    'namespaced_names' => 1,
+    'namespaced-names' => false,
 );
 
+
+// David munging 'Everts crappy option parser'
 for($i=0; $i < count($arguments); $i++) {
 
-    if (substr($arguments[$i],0,2)==='--') {
+    if ($arguments[$i] == '--namespaced-names') {
+        $named['namespaced-names'] = true;
+    }
+    elseif(substr($arguments[$i],0,2) === '--') {
         $named[substr($arguments[$i],2)] = $arguments[$i+1];
         $i++;
-    } else {
+    }
+    else {
         $positional[] = $arguments[$i];
     }
-
 }
 
+
 if (count($positional) < 1) {
-    echo <<<HI
+    echo <<<EOF
 PHPDocumentor Markdown Generator
 
 Usage:
 
     # First generate a structure.xml file with phpdocumentor.
     # This command will generate structure.xml in the current directory.
-    phpdoc parse -t . -d [project path]
+    phpdoc  -d [project path] -t . --template="xml"
 
     # Next, run phpdocmd:
     {$argv[0]} structure.xml [outputdir]
@@ -60,8 +66,10 @@ Options:
         This specifies the 'template' for links we're generating. By default
         this is "%c.md".
 
+    --namespaced-names
+        Print namespaces in front of class method names
 
-HI;
+EOF;
     die();
 
 }
@@ -71,7 +79,7 @@ $outputDir = isset($positional[1])?$positional[1]:'.';
 
 $parser = new PHPDocMD\Parser(
     $input,
-    $named['namespaced_names']
+    $named['namespaced-names']
 );
 
 echo "Parsing structure.xml\n";
