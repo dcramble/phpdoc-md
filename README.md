@@ -1,33 +1,22 @@
 PHPDocumentor MarkDown export
 =============================
 
-This is a script that can generate markdown (.md) files for your API
-documentation.
-
-It is tailored for projects using PSR-0, PSR-1, PSR-2 and PHP 5.3 namespaces.
-The project was primarily developed for [SabreDAV](https://github.com/evert/sabreDAV),
-but it should work for other codebases as well.
+This script will generate markdown (.md) API documentation files from a
+PHPDocumentor XML output file.
 
 It only documents classes and interfaces.
 
-The code is ugly, it was intended as a one-off, and I was in a hurry.. so the
-codebase may not be up to your standards. (it certainly isn't up to mine).
+This project was originally developed by [Evert Pot](https://twitter.com/evertp).
+See his [repo](https://github.com/evert/phpdoc-md) for more details.
 
 Installation
 ------------
 
 This project assumes you have composer installed.
-Simply add:
 
-    "require-dev" : {
-
-        "gkcgautam/phpdoc-md" : "~0.0.7"
-
-    }
-
-To your composer.json, and then you can simply install with:
-
-    composer install
+```bash
+$ composer require dcramble/phpdoc-md "~0.0.7"
+```
 
 
 Usage
@@ -55,7 +44,6 @@ Options
         This specifies the 'template' for links we're generating. By default
         this is "%c.md".
 
-This should generate all the .md files. I'm excited to hear your feedback.
+This should generate all the .md files.
 
-Cheers,
-[Evert](https://twitter.com/evertp)
+
