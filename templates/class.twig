@@ -1,32 +1,40 @@
 {{ className }}
-===============
+---------------
 
-{{ description }}
+    {{ description }}
 
-{{ longDescription|raw }}
+    {{ longDescription|raw }}
 
 {% if isClass %}
 
-* Class name: {{ shortClass }}
-* Namespace: {{ namespace }}
-{% if abstract %}* This is an **abstract** class
+**Class name**: {{ shortClass }}
+
+**Namespace**: {{ namespace }}
+
+{% if abstract %}**This is an abstract class**
 {% endif %}
-{% if extends[0] %}* Parent class: {{ extends.0|classLink }}
+
+{% if extends[0] %}**Parent class**: {{ extends.0|classLink }}
 {% endif %}
-{% if implements %}* This class implements: {% for interface in implements %}{{ interface|classLink }}{%if not loop.last %}, {% endif %}{% endfor %}
+
+{% if implements %}**This class implements**: {% for interface in implements %}{{ interface|classLink }}{%if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
-{% if deprecated %}* **Warning:** this class is **deprecated**. This means that this class will likely be removed in a future version.
+
+{% if deprecated %}**Warning:** this class is **deprecated**. This means that this class will likely be removed in a future version.
 {% endif %}
 
 {% endif %}
 
 {% if isInterface %}
-* Interface name: {{ shortClass }}
-* Namespace: {{ namespace }}
-* This is an **interface**
-{% if extends %}* This interface extends: {% for interface in extends %}{{ interface|classLink }}{%if not loop.last %}, {% endif %}{% endfor %}
+**Interface name**: {{ shortClass }}
+
+**Namespace**: {{ namespace }}
+
+**This is an interface**
+{% if extends %}**This interface extends**: {% for interface in extends %}{{ interface|classLink }}{%if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
-{% if deprecated %}* **Warning:** this interface is **deprecated**. This means that this interface will likely be removed in a future version.
+
+{% if deprecated %}**Warning:** this interface is **deprecated**. This means that this interface will likely be removed in a future version.
 {% endif %}
 
 {% endif %}
@@ -56,18 +64,18 @@ Properties
 
 {% for property in properties %}
 
-### {{ property.name }}
+**{{ property.name }}** - {{ property.description|raw }}
 
     {{ property.signature|raw }}
 
-{{ property.description|raw }}
 
-* Visibility: **{{ property.visibility }}**
-{% if property.deprecated %}* **Warning:** this property is **deprecated**. This means that this property will likely be removed in a future version.
+{% if property.deprecated %}**Warning:** this property is **deprecated**. This means that this property will likely be removed in a future version.
 {% endif %}
-{% if property.static %}* This property is **static**.
+
+{% if property.static %}This property is **static**.
 {% endif %}
-{% if property.definedBy != className %}* This property is defined by {{ property.definedBy|classLink }}
+
+{% if property.definedBy != className %}This property is defined by {{ property.definedBy|classLink }}
 {% endif %}
 
 {% endfor %}
@@ -79,30 +87,36 @@ Methods
 
 {% for method in methods %}
 
-### {{ method.name }}
+{{ method.visibility }} **{{ method.name }}**
 
     {{ method.signature|raw }}
 
 {{ method.description|raw }}
 
-* Visibility: **{{ method.visibility }}**
-{% if method.abstract %}* This method is **abstract**.
+
+{% if method.abstract %}This method is **abstract**.
 {% endif %}
-{% if method.static %}* This method is **static**.
+
+{% if method.static %}This method is **static**.
 {% endif %}
-{% if method.deprecated %}* **Warning:** this method is **deprecated**. This means that this method will likely be removed in a future version.
+
+{% if method.deprecated %}**Warning:** this method is **deprecated**. This means that this method will likely be removed in a future version.
 {% endif %}
-{% if method.definedBy != className %}* This method is defined by {{ method.definedBy|classLink }}
+
+{% if method.definedBy != className %}This method is defined by {{ method.definedBy|classLink }}
 {% endif %}
 
 
 {% if method.arguments %}
-#### Arguments
+    **Arguments**:
+
 {% for argument in method.arguments %}
-* {{ argument.name }} **{% if argument.type %}{{ argument.type|classLink }}{% else %}mixed{% endif %}**{% if argument.description %} - {{ argument.description }}{% endif %}
+    **{{ argument.name }}** {% if argument.type %}{{ argument.type|classLink }}{% else %}mixed{% endif %} {% if argument.description %} - {{ argument.description }}{% endif %}
 
 {% endfor %}
 
 {% endif %}
+
+--
 
 {% endfor %}
