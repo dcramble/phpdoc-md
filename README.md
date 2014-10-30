@@ -15,7 +15,7 @@ Installation
 This project assumes you have composer installed.
 
 ```bash
-$ composer require dcramble/phpdoc-md "~0.0.7"
+$ composer require dcramble/phpdoc-md "~0.1"
 ```
 
 
