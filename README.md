@@ -43,6 +43,10 @@ Options
     --lt [template]
         This specifies the 'template' for links we're generating. By default
         this is "%c.md".
+    
+    --namespaced-names
+        This specifies the fully qualified classes, with namespaces, should
+        be printed.
 
 This should generate all the .md files.
 
