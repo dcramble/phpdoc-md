@@ -9,6 +9,8 @@ It only documents classes and interfaces.
 This project was originally developed by [Evert Pot](https://twitter.com/evertp).
 See his [repo](https://github.com/evert/phpdoc-md) for more details.
 
+Take a look at some [Example Markdown API Docs](https://github.com/MESD/SettingsBundle/blob/master/Resources/doc/api/ApiIndex.md).
+
 Installation
 ------------
 
